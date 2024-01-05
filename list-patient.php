@@ -1,19 +1,38 @@
 <?php
 require_once './config/connexion.php';
 
-$preparedRequest =  $connexion->prepare("SELECT * FROM patients");
+$countRequest =  $connexion->query("SELECT COUNT(*) AS nombre_patient FROM patients");
+$countPatient = $countRequest->fetch();
+
+$itemPerPage = 1;
+
+$numberPages = ceil($countPatient['nombre_patient']/$itemPerPage);
+
+$page = $_GET['page'] ?? 1;
+
+if (!empty($_GET['search'])) {
+    // Requete avec le nom du patient
+    $preparedRequest =  $connexion->prepare("SELECT * FROM patients WHERE lastname LIKE '%". $_GET['search']."%'");
+}else{
+    $offset = $itemPerPage * ($_GET['page']-1);
+    $preparedRequest =  $connexion->prepare("SELECT * FROM patients LIMIT ".$itemPerPage . " OFFSET ".$offset );
+}
+
 $preparedRequest->execute();
 $patients = $preparedRequest->fetchAll(PDO::FETCH_ASSOC);
-// echo '<pre>';
-// var_dump($patients);
-// echo '</pre>';
-
 ?>
 
 <?php include './partials/header.php' ?>
 
 
 <section class="container">
+    <form action="" method="get">
+        <div class="mb-3">
+            <label for="search" class="form-label">Rechercher un patient</label>
+            <input type="text" class="form-control" id="search" name="search" placeholder="Recherche un patient avec son nom">
+        </div>
+        <button class="btn btn-primary" type="submit">Rechercher</button>
+    </form>
     <table class="table">
         <thead>
             <tr>
@@ -44,6 +63,16 @@ $patients = $preparedRequest->fetchAll(PDO::FETCH_ASSOC);
             <?php } ?>
         </tbody>
     </table>
+    <?php if ($page - 1) {?>
+        <a href="./list-patient.php?page=<?=$page-1?>">précédent</a>
+    <?php } ?>
+    <?php for ($i=1; $i <= $numberPages ; $i++) { ?>
+        <a href="./list-patient.php?page=<?=$i?>"><?=$i?></a>
+    <?php } ?>
+    <?php if ($page + 1 <= $numberPages) {?>
+        <a href="./list-patient.php?page=<?=$page + 1?>">suivant</a>
+    <?php } ?>
+
 </section>
 
 

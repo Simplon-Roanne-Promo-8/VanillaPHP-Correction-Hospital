@@ -28,8 +28,15 @@
                             <a class="nav-link" href="./list-patient.php">Liste des Patients</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                            <a class="nav-link" href="./ajout-rendez-vous.php">Ajout rendez-vous</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./list-rendez-vous.php">Liste rendez-vous</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./ajout-patient-rendez-vous.php">Ajouter un patient + un rendez-vous</a>
+                        </li>
+                        
                     </ul>
                 </div>
             </div>
