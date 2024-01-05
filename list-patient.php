@@ -14,7 +14,7 @@ if (!empty($_GET['search'])) {
     // Requete avec le nom du patient
     $preparedRequest =  $connexion->prepare("SELECT * FROM patients WHERE lastname LIKE '%". $_GET['search']."%'");
 }else{
-    $offset = $itemPerPage * ($_GET['page']-1);
+    $offset = $itemPerPage * ($page-1);
     $preparedRequest =  $connexion->prepare("SELECT * FROM patients LIMIT ".$itemPerPage . " OFFSET ".$offset );
 }
 
